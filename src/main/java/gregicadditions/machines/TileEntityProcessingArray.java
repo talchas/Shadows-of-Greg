@@ -427,7 +427,20 @@ public class TileEntityProcessingArray extends RecipeMapMultiblockController {
 			IMultipleTankHandler importFluids = getInputTank();
 
 			boolean dirty = checkRecipeInputsDirty(importInventory, importFluids);
-			if(dirty || forceRecipeRecheck) {
+			if (dirty || forceRecipeRecheck) {
+				String oldMachine = this.machineName;
+				int oldTier = this.machineTierVoltage;
+				if (!findMachine(importInventory).equals(oldMachine) || oldTier != this.machineTierVoltage) {
+					// available machines changed, don't use cached recipe without rechecking
+					previousRecipe = null;
+				}
+			}
+
+			if (previousRecipe != null &&
+				previousRecipe.matches(false, importInventory, importFluids)) {
+				// if previous recipe still matches inputs, try to use it
+				currentRecipe = previousRecipe;
+			} else if (dirty || forceRecipeRecheck) {
 				this.forceRecipeRecheck = false;
 
 				// else, try searching new recipe for given inputs
@@ -435,11 +448,6 @@ public class TileEntityProcessingArray extends RecipeMapMultiblockController {
 
 				if(currentRecipe != null)
 					this.previousRecipe = currentRecipe;
-
-			} else if(previousRecipe != null &&
-				previousRecipe.matches(false, importInventory, importFluids)) {
-				// if previous recipe still matches inputs, try to use it
-				currentRecipe = previousRecipe;
 			}
 			if(currentRecipe != null && setupAndConsumeRecipeInputs(currentRecipe))
 				setupRecipe(currentRecipe);
