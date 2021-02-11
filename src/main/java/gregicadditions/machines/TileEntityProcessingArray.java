@@ -430,7 +430,7 @@ public class TileEntityProcessingArray extends RecipeMapMultiblockController {
 			if (dirty || forceRecipeRecheck) {
 				String oldMachine = this.machineName;
 				int oldTier = this.machineTierVoltage;
-				if (!findMachine(importInventory, importFluids).equals(oldMachine) || oldTier != this.machineTierVoltage) {
+				if (!findMachine(importInventory).equals(oldMachine) || oldTier != this.machineTierVoltage) {
 					// available machines changed, don't use cached recipe without rechecking
 					previousRecipe = null;
 				}
