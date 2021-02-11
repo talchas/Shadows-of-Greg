@@ -437,7 +437,7 @@ public class TileEntityProcessingArray extends RecipeMapMultiblockController {
 			}
 
 			if (previousRecipe != null &&
-                previousRecipe.matches(false, importInventory, importFluids)) {
+				previousRecipe.matches(false, importInventory, importFluids)) {
 				// if previous recipe still matches inputs, try to use it
 				currentRecipe = previousRecipe;
 			} else if (dirty || forceRecipeRecheck) {
